@@ -1,74 +1,51 @@
-import { getFinalState } from './processQueue.js';
+import { useImmer } from 'use-immer';
+import Background from './Background.js';
+import Box from './Box.js';
 
-function increment(n) {
-  return n + 1;
-}
-increment.toString = () => 'n => n+1';
+const initialPosition = {
+  x: 0,
+  y: 0
+};
 
-export default function App() {
+export default function Canvas() {
+  const [shape, updateShape] = useImmer({
+    color: 'orange',
+    position: initialPosition
+  });
+
+  function handleMove(dx, dy) {
+    updateShape(draft => {
+      draft.position.x += dx;
+      draft.position.y += dy;
+    });
+  }
+
+  function handleColorChange(e) {
+    updateShape(draft => {
+      draft.color = e.target.value;
+    });
+  }
+
   return (
     <>
-      <TestCase
-        baseState={0}
-        queue={[1, 1, 1]}
-        expected={1}
+      <select
+        value={shape.color}
+        onChange={handleColorChange}
+      >
+        <option value="orange">orange</option>
+        <option value="lightpink">lightpink</option>
+        <option value="aliceblue">aliceblue</option>
+      </select>
+      <Background
+        position={initialPosition}
       />
-      <hr />
-      <TestCase
-        baseState={0}
-        queue={[
-          increment,
-          increment,
-          increment
-        ]}
-        expected={3}
-      />
-      <hr />
-      <TestCase
-        baseState={0}
-        queue={[
-          5,
-          increment,
-        ]}
-        expected={6}
-      />
-      <hr />
-      <TestCase
-        baseState={0}
-        queue={[
-          5,
-          increment,
-          42,
-        ]}
-        expected={42}
-      />
-    </>
-  );
-}
-
-function TestCase({
-  baseState,
-  queue,
-  expected
-}) {
-  const actual = getFinalState(baseState, queue);
-  return (
-    <>
-      <p>Base state: <b>{baseState}</b></p>
-      <p>Queue: <b>[{queue.join(', ')}]</b></p>
-      <p>Expected result: <b>{expected}</b></p>
-      <p style={{
-        color: actual === expected ?
-          'green' :
-          'red'
-      }}>
-        Your result: <b>{actual}</b>
-        {' '}
-        ({actual === expected ?
-          'correct' :
-          'wrong'
-        })
-      </p>
+      <Box
+        color={shape.color}
+        position={shape.position}
+        onMove={handleMove}
+      >
+        Drag me!
+      </Box>
     </>
   );
 }
