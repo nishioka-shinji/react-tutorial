@@ -1,14 +1,9 @@
-export default function Clock({ time }) {
-  let hours = time.getHours();
-  let hoge
-  if (hours >= 0 && hours <= 6) {
-    hoge = 'night';
-  } else {
-    hoge = 'day';
-  }
+import { useState } from 'react';
+
+export default function Clock(props) {
   return (
-    <h1 id="time" className={hoge}>
-      {time.toLocaleTimeString()}
+    <h1 style={{ color: props.color }}>
+      {props.time}
     </h1>
   );
 }
