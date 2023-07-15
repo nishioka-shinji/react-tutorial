@@ -1,51 +1,59 @@
+import { useState } from 'react';
 import { useImmer } from 'use-immer';
-import Background from './Background.js';
-import Box from './Box.js';
+import AddTodo from './AddTodo.js';
+import TaskList from './TaskList.js';
 
-const initialPosition = {
-  x: 0,
-  y: 0
-};
+let nextId = 3;
+const initialTodos = [
+  { id: 0, title: 'Buy milk', done: true },
+  { id: 1, title: 'Eat tacos', done: false },
+  { id: 2, title: 'Brew tea', done: false },
+];
 
-export default function Canvas() {
-  const [shape, updateShape] = useImmer({
-    color: 'orange',
-    position: initialPosition
-  });
+export default function TaskApp() {
+  const [todos, updateTodos] = useImmer(
+    initialTodos
+  );
 
-  function handleMove(dx, dy) {
-    updateShape(draft => {
-      draft.position.x += dx;
-      draft.position.y += dy;
+  function handleAddTodo(title) {
+    updateTodos(draft => {
+      draft.push({
+        id: nextId++,
+        title: title,
+        done: false
+      });
     });
   }
 
-  function handleColorChange(e) {
-    updateShape(draft => {
-      draft.color = e.target.value;
+  function handleChangeTodo(nextTodo) {
+    updateTodos(draft => {
+      const todo = draft.find(t =>
+        t.id === nextTodo.id
+      );
+      todo.title = nextTodo.title;
+      todo.done = nextTodo.done;
+    });
+  }
+
+  function handleDeleteTodo(todoId) {
+    updateTodos(draft => {
+      const index = draft.findIndex(t =>
+        t.id === todoId
+      );
+      draft.splice(index, 1);
     });
   }
 
   return (
     <>
-      <select
-        value={shape.color}
-        onChange={handleColorChange}
-      >
-        <option value="orange">orange</option>
-        <option value="lightpink">lightpink</option>
-        <option value="aliceblue">aliceblue</option>
-      </select>
-      <Background
-        position={initialPosition}
+      <AddTodo
+        onAddTodo={handleAddTodo}
       />
-      <Box
-        color={shape.color}
-        position={shape.position}
-        onMove={handleMove}
-      >
-        Drag me!
-      </Box>
+      <TaskList
+        todos={todos}
+        onChangeTodo={handleChangeTodo}
+        onDeleteTodo={handleDeleteTodo}
+      />
     </>
   );
 }
