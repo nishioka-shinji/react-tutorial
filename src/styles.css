@@ -46,5 +46,4 @@ ul {
   padding-left: 20px;
 }
 
-label { display: block; }
-input { margin-left: 5px; margin-bottom: 5px; }
+label { display: block; margin-bottom: 20px; }
