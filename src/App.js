@@ -1,49 +1,39 @@
 import { useState } from 'react';
-import { foods, filterItems } from './data.js';
+import Contact from './Contact.js';
 
-export default function FilterableList() {
-  const [query, setQuery] = useState('');
-  const results = filterItems(foods, query);
+export default function ContactList() {
+  const [reverse, setReverse] = useState(false);
 
-  function handleChange(e) {
-    setQuery(e.target.value);
+  const displayedContacts = [...contacts];
+  if (reverse) {
+    displayedContacts.reverse();
   }
 
   return (
     <>
-      <SearchBar
-        query={query}
-        onChange={handleChange}
-      />
-      <hr />
-      <List items={results} />
+      <label>
+        <input
+          type="checkbox"
+          value={reverse}
+          onChange={e => {
+            setReverse(e.target.checked)
+          }}
+        />{' '}
+        Show in reverse order
+      </label>
+      <ul>
+        {displayedContacts.map(contact =>
+          <li key={contact.id}>
+            <Contact contact={contact} />
+          </li>
+        )}
+      </ul>
     </>
   );
 }
 
-function SearchBar({ query, onChange }) {
-  return (
-    <label>
-      Search:{' '}
-      <input
-        value={query}
-        onChange={onChange}
-      />
-    </label>
-  );
-}
-
-function List({ items }) {
-  return (
-    <table>
-      <tbody> 
-        {items.map(food => (
-          <tr key={food.id}>
-            <td>{food.name}</td>
-            <td>{food.description}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
+const contacts = [
+  { id: 0, name: 'Alice', email: 'alice@mail.com' },
+  { id: 1, name: 'Bob', email: 'bob@mail.com' },
+  { id: 2, name: 'Taylor', email: 'taylor@mail.com' }
+];

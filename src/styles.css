@@ -46,6 +46,19 @@ ul {
   padding-left: 20px;
 }
 
-button { margin: 5px; }
-li { border-radius: 5px; }
-.highlighted { background: #d2eaff; }
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+li {
+  margin-bottom: 20px;
+}
+label {
+  display: block;
+  margin: 10px 0;
+}
+button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
