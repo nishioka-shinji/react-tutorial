@@ -1,13 +1,30 @@
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
-import { TasksProvider } from './TasksContext.js';
+import { useState, useRef } from 'react';
 
-export default function TaskApp() {
+export default function Chat() {
+  const [text, setText] = useState('');
+  const textRef = useRef(text);
+
+  function handleChange(e) {
+    setText(e.target.value);
+    textRef.current = e.target.value;
+  }
+
+  function handleSend() {
+    setTimeout(() => {
+      alert('Sending: ' + textRef.current);
+    }, 3000);
+  }
+
   return (
-    <TasksProvider>
-      <h1>Day off in Kyoto</h1>
-      <AddTask />
-      <TaskList />
-    </TasksProvider>
+    <>
+      <input
+        value={text}
+        onChange={handleChange}
+      />
+      <button
+        onClick={handleSend}>
+        Send
+      </button>
+    </>
   );
 }
