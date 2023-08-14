@@ -1,30 +1,17 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
+import SearchButton from './SearchButton.js';
+import SearchInput from './SearchInput.js';
 
-export default function Chat() {
-  const [text, setText] = useState('');
-  const textRef = useRef(text);
-
-  function handleChange(e) {
-    setText(e.target.value);
-    textRef.current = e.target.value;
-  }
-
-  function handleSend() {
-    setTimeout(() => {
-      alert('Sending: ' + textRef.current);
-    }, 3000);
-  }
-
+export default function Page() {
+  const inputRef = useRef(null);
   return (
     <>
-      <input
-        value={text}
-        onChange={handleChange}
-      />
-      <button
-        onClick={handleSend}>
-        Send
-      </button>
+      <nav>
+        <SearchButton onClick={() => {
+          inputRef.current.focus();
+        }} />
+      </nav>
+      <SearchInput ref={inputRef} />
     </>
   );
 }
